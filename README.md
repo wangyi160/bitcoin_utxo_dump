@@ -46,6 +46,7 @@ start read data from leveldb in chainstate folder, generate csv files in csv fol
 8. (optional) import data into mongodb (windows only)
 
 modify dbimport.bat, replace db name and collection name in line 4  
+
     mongoimport /d {db} /c {collection} /type csv /file csv\%%G /headerline 
 
 ------------------------------------------------------------------------------------------------------

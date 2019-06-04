@@ -28,6 +28,7 @@ lib folder contains the js files for running
 4. modify the chainstate path in src/index.js
 
 replace your chainstate path here in line 14
+
     const db = level('{chainstate path}', { keyEncoding: 'hex', valueEncoding: 'hex' });
 
 5. yarn run flow

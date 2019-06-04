@@ -15,7 +15,7 @@ because leveldb cannot be accessed by multiple clients, so you have to stop bitc
 
 1. yarn install
 
-install the node modules need for the project
+install the node modules needed for the project
 
 2. make directory csv
 
@@ -28,7 +28,7 @@ lib folder contains the js files for running
 4. modify the chainstate path in src/index.js
 
 // replace your chainstate path here.
-const db = level('<chainstate path>', { keyEncoding: 'hex', valueEncoding: 'hex' });
+    const db = level('{chainstate path}', { keyEncoding: 'hex', valueEncoding: 'hex' });
 
 5. yarn run flow
 
@@ -36,7 +36,7 @@ check the type annotation in src/* files
 
 6. yarn run build
 
-generate real js files in lib folder
+generate runnable js files in lib folder
 
 7. node lib/index.js
 
@@ -45,7 +45,7 @@ start read data from leveldb in chainstate folder, generate csv files in csv fol
 8. (optional) import data into mongodb (windows only)
 
 modify dbimport.bat, replace db name and collection name in line 4  
-    mongoimport /d <db> /c <collection> /type csv /file csv\%%G /headerline 
+    mongoimport /d {db} /c {collection} /type csv /file csv\%%G /headerline 
 
 ------------------------------------------------------------------------------------------------------
 

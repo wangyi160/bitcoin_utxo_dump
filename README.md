@@ -1,7 +1,11 @@
 
 How it works
 
-The official bitcoin client (https://github.com/bitcoin/bitcoin) store utxo information in data/testnet3/chainstate (for testnet) or data/mainnet/chainstate (for mainnet). This chainstate folder contains leveldb files, bitcoin_utxo_dump read and parse data from leveldb and write the result into multiple csv files (100000 entries every file).
+Offline mode:
+The official bitcoin client (https://github.com/bitcoin/bitcoin) store utxo information in data/testnet3/chainstate (for testnet) or data/mainnet/chainstate (for mainnet). This chainstate folder contains leveldb files, bitcoin_utxo_dump read and parse data from leveldb and write the result into multiple json files (100000 entries every file). Use mongoimport to import data files into mongodb.
+
+Online mode:
+After the offline dump(about 30 minutes), we nearly have 99% utxo in database. We can fetch data from bitcoind rpc service and parse in real time to make latest utxos.
 
 ------------------------------------------------------------------------------------------------------
 
@@ -41,19 +45,25 @@ generate runnable js files in lib folder
 
 7. node lib/index.js
 
-start read data from leveldb in chainstate folder, generate csv files in csv folder, it takes quite a while to finish. For testnet, there are about 22000000 entries at this time ( 2019.06.04 ), which will generate 200+ csv files. 
+start read data from leveldb in chainstate folder, generate json files in csv folder, it takes a while to finish. For testnet, there are about 22000000 entries at this time ( 2019.06.04 ), which will generate 200+ json files. 
 
-8. (optional) import data into mongodb (windows only)
+record latest block hash and get latest block height.
+
+8. import data into mongodb (windows only)
 
 modify dbimport.bat, replace db name and collection name in line 4  
 
-    mongoimport /d {db} /c {collection} /type csv /file csv\%%G /headerline 
+    mongoimport /d {db} /c {collection} /type json /file csv\%%G /jsonArray 
+
+9. node lib/btcindex.js
+
+modify the block height in line 190
 
 ------------------------------------------------------------------------------------------------------
 
-Some pitfalls 
+Acknowledgement
 
-This project is basically a nodejs reimplementation from https://github.com/in3rsha/bitcoin-utxo-dump, with the exception that it drops all the entries where address cannot be resolved ( this happens when the script type is "non-standard" or "p2ms" ). I don't know whether such dropping is appropriate.
+This project's offline dump tool is basically a nodejs reimplementation from https://github.com/in3rsha/bitcoin-utxo-dump. 
 
 
 

@@ -4,27 +4,29 @@
 'use strict';
 
 const level = require('level');
-const fastcsv = require('fast-csv');  
+// const fastcsv = require('fast-csv');  
 const fs = require('fs');  
 
 
 const { deobfuscate, reverseHex, decodeRecordKey, decodeRecordValue } = require('./decode');
 
 // replace your chainstate path here.
-const db = level('<chainstate path>', { keyEncoding: 'hex', valueEncoding: 'hex' });
+const db = level('E:/bitcoinj/data/testnet3/chainstate2', { keyEncoding: 'hex', valueEncoding: 'hex' });
 
 let obfKey: string;
 let latestBlockHash: string;
 
-let cs;
-let ws;
+// let cs;
+// let ws;
 
 let count=0;
+let fileNo=0;
+let writeData=[];
 
 function readLeveldb()
 {
     
-    const rr = db.createReadStream({ limit: 190000 });
+    const rr = db.createReadStream({ });
 
 
     rr.on('data', onData);
@@ -34,8 +36,8 @@ function readLeveldb()
     rr.on('close', function () {
         console.log('Stream closed');
         
+        fs.writeFile("csv/out"+(fileNo)+".csv", JSON.stringify(writeData), callback);
         
-        cs.end();
     });
     rr.on('end', function () {
         console.log('Stream ended')
@@ -46,7 +48,10 @@ function readLeveldb()
     });
 }
 
+function callback(err)
+{
 
+}
 
 function onData(data)
 {
@@ -68,35 +73,46 @@ function onData(data)
             let { num, txid } = decodeRecordKey(data.key);
             let { address, scriptType, amount, height, isCoinBase } = decodeRecordValue(data.value, obfKey, true);
 
-            if(address == "unknown")
+            
+                
+            // write to a new csv file every 100000 entries
+
+            let update = {txid: txid, vout: num, voutCount: -1, address: address, value: amount/100000000, 
+                scriptPubKey: { type: scriptType, addresses: [address] }, 
+                blockHeight: height, locked: false, lockedId: ""};
+            
+            if(count % 100000 ==0)
             {
-                console.log(txid+","+num+","+address+","+scriptType+","+amount+","+ height+","+isCoinBase);       
+                fileNo = count/100000;
+                
+                // fs.close();
+
+                // if(cs)
+                //     cs.end();
+
+                // cs = fastcsv.createWriteStream({headers: true});
+                // ws = fs.createWriteStream("csv/out"+fileNo+".csv"); 
+                // cs.pipe(ws);
+
+
+                if(fileNo>0)
+                {
+                    fs.writeFile("csv/out"+(fileNo-1)+".csv", JSON.stringify(writeData), callback);
+                }
+
+                writeData=[];
+                writeData.push(update);
             }
             else
             {
-                // console.log(txid+","+num+","+address+","+scriptType+","+amount+","+ height+","+isCoinBase); 
+                            
+                // cs.write(update);
                 
-                // write to a new csv file every 100000 entries
-                if(count % 100000 ==0)
-                {
-                    let fileNo = count/100000;
-                    
-                    if(cs)
-                        cs.end();
-
-                    cs = fastcsv.createWriteStream({headers: true});
-                    ws = fs.createWriteStream("csv/out"+fileNo+".csv"); 
-                    cs.pipe(ws);
-                                    
-                    console.log("processed: "+ count);
-                }
-
-                let update = {txid: txid, num: num, address: address, scriptType: scriptType, 
-                    amount: amount, height: height, isCoinBase: isCoinBase};
-                
-                cs.write(update);
-                count++;
+                writeData.push(update);
             }
+
+            count++;
+            // }
             
         }
     }

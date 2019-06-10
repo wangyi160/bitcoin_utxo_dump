@@ -264,8 +264,8 @@ function decodeRecordValue(value: string, obfKey: string, testnet: boolean = fal
     }
 
     let scriptBuffer = Buffer.from(script, "hex");
-    let address = "unknown" ;
-    let scriptType ="unknown";
+    let address = "non-standard" ;
+    let scriptType ="nulldata";
     
     // P2PKH, 使用ripmend160+base58
     if(nSize == 0)

@@ -1,6 +1,6 @@
 @echo off
 SET count=1
 FOR /f "tokens=*" %%G IN ('dir /b csv\out*') DO (
-	mongoimport /d mydb /c btcutxo /type csv /file csv\%%G /headerline 
+	mongoimport /d mydb2 /c btcutxo /type json /file csv\%%G /jsonArray 
 )
 

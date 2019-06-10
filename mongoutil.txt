@@ -1,0 +1,20 @@
+
+// delete addresses field when type is nulldata
+db.btcutxo.updateMany({"scriptPubKey.type":"nulldata"}, {$unset: {"scriptPubKey.addresses": ""}})
+
+// update the type field , 
+// p2pkh -> pubkeyhash 
+// p2sh -> scripthash 
+// p2wpkh -> witness_v0_keyhash 
+// p2wsh -> witness_v0_scripthash 
+// p2pk -> pubkey
+
+db.btcutxo.updateMany({"scriptPubKey.type":"p2pkh"}, {$set: {"scriptPubKey.type": "pubkeyhash"}})
+db.btcutxo.updateMany({"scriptPubKey.type":"p2sh"}, {$set: {"scriptPubKey.type": "scripthash"}})
+db.btcutxo.updateMany({"scriptPubKey.type":"p2wpkh"}, {$set: {"scriptPubKey.type": "witness_v0_keyhash"}})
+db.btcutxo.updateMany({"scriptPubKey.type":"p2wsh"}, {$set: {"scriptPubKey.type": "witness_v0_scripthash"}})
+db.btcutxo.updateMany({"scriptPubKey.type":"p2pk"}, {$set: {"scriptPubKey.type": "pubkey"}})
+
+
+
+

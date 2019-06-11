@@ -134,17 +134,22 @@ async function utxoDumpFromHeight(height: number) {
     await sleep(1000);
 
     let i = block.height;
-    while (i <= blockcount ) {
-        await utxoDumpByHeight(i);
-        await sleep(1000);
 
+    while(true)
+    {
+        while ( i<= blockcount ) {
+            console.log(i);
+            await utxoDumpByHeight(i);
+            await sleep(1000);
+                        
+            i++;
+            
+        }
+
+        // wait for 1 minutes
+        await sleep(60000);
         blockcount = await req.getBlockCount();
         console.log(blockcount);
-        await sleep(1000);
-
-        i++;
-
-        // break;
     }
 
     // mongodb.close();
@@ -187,7 +192,7 @@ async function utxoDumpByHeight(height: number) {
 // 00000000000001bb2d6544248788607c156cefc1095bbaee7ddc36039093ebdb
 
 // utxoFromHash("00000000000001bb2d6544248788607c156cefc1095bbaee7ddc36039093ebdb");
-utxoDumpFromHeight(1516027);
+utxoDumpFromHeight(1542278);
 
 
 

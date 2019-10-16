@@ -11,7 +11,8 @@ After the offline dump(about 30 minutes), we nearly have 99% utxo in database. W
 
 How to use it
 
-It use flow (https://flow.org/) as the type checker for nodejs as it is a good habbit to write js program with typed style. Although it may not be necessary for this small project, but I follow the good pratice.
+It use flow (https://flow.org/) as the type checker for nodejs as it is a good habbit to write js program with typed style. Although it may not be necessary for this small project, but I follow the good pratice. 
+Note: node version should only be 8.x in order to use level lib.
 
 0. stop bitcoind
 

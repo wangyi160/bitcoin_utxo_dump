@@ -11,7 +11,7 @@
   "dependencies": {
     "bigi": "^1.4.2",
     "bitcoinjs-lib": "^5.0.5",
-    "fast-csv": "^2.5.0",
+    "fast-csv": "^4.3.6",
     "level": "^5.0.1",
     "log4js": "^4.3.1",
     "mongodb": "^3.2.6",

@@ -13,7 +13,7 @@
     "bitcoinjs-lib": "^5.0.5",
     "fast-csv": "^2.5.0",
     "level": "^5.0.1",
-    "log4js": "^4.3.1",
+    "log4js": "^6.4.0",
     "mongodb": "^3.2.6",
     "request": "^2.88.0"
   }
